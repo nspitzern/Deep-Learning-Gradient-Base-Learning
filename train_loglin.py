@@ -81,8 +81,6 @@ if __name__ == '__main__':
     learning_rate = 1e-3
     num_iterations = 10
 
-    # features_2_index, label_2_index, train_data = load_train_set('train')
-    # dev_data = load_dev_set('dev')
     train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
     # input dimension is the number of features (bigrams)

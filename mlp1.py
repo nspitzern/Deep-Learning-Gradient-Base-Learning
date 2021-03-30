@@ -24,8 +24,10 @@ def classifier_output(x, params):
     # YOUR CODE HERE.
     W, b, U, b_tag = params
 
+    global z1
     z1 = np.dot(x, W) + b
 
+    global h
     h = np.tanh(z1)
 
     z2 = np.dot(h, U) + b_tag
@@ -55,12 +57,30 @@ def loss_and_gradients(x, y, params):
     gb_tag: vector, gradients of b_tag
     """
     # YOU CODE HERE
+    W, b, U, b_tag = params
+
     y_hat = classifier_output(x, params)
     loss = -np.log(y_hat[y])
 
     # b_tag gradient
+    gb_tag = y_hat.copy()
+    gb_tag[y] -= 1
 
-    return loss
+    # U gradient
+    h_copy = h.copy()
+    gU = np.outer(h_copy, y_hat.copy())
+    gU[:, y] -= h_copy
+
+    # b gradient
+    z1_copy = z1.copy()
+    g_tanh = 1 - np.tanh(z1_copy) ** 2
+    gL_dh = np.dot(U, y_hat.copy()) - U[:, y]
+    gb = gL_dh * g_tanh
+
+    # W gradient
+    gW = np.outer(x, gb.copy())
+
+    return loss, [gW, gb, gU, gb_tag]
 
 
 def create_classifier(in_dim, hid_dim, out_dim):
@@ -80,4 +100,44 @@ def create_classifier(in_dim, hid_dim, out_dim):
 
     params.extend([W, b, U, b_tag])
     return params
+
+
+if __name__ == '__main__':
+    # Sanity checks. If these fail, your gradient calculation is definitely wrong.
+    # If they pass, it is likely, but not certainly, correct.
+    from grad_check import gradient_check
+
+    W, b, U, b_tag = create_classifier(3, 4, 4)
+
+    def _loss_and_W_grad(W):
+        global b, U, b_tag
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[0]
+
+    def _loss_and_b_grad(b):
+        global W, U, b_tag
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[1]
+
+    def _loss_and_U_grad(U):
+        global W, b, b_tag
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[2]
+
+    def _loss_and_b_tag_grad(b_tag):
+        global U, b, W
+        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        return loss, grads[3]
+
+
+    for _ in range(10):
+        W = np.random.randn(W.shape[0], W.shape[1])
+        b = np.random.randn(b.shape[0])
+        U = np.random.randn(U.shape[0], U.shape[1])
+        b_tag = np.random.randn(b_tag.shape[0])
+        gradient_check(_loss_and_b_grad, b)
+        gradient_check(_loss_and_W_grad, W)
+        gradient_check(_loss_and_b_tag_grad, b_tag)
+        gradient_check(_loss_and_U_grad, U)
+
 
