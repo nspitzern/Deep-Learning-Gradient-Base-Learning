@@ -20,6 +20,8 @@ def feats_to_vec(features):
         # for each feature - add 1 to the vector
         index = get_feature_index(feature)
 
+        if index is None:  # skip unknown features
+            continue
         feat_vec[index] += 1
     return feat_vec
 
@@ -85,7 +87,7 @@ if __name__ == '__main__':
     train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
     # define the sizes of the layers in the network
-    dims = [get_common_features_number(), 20, 10, 20, get_labels_number()]
+    dims = [get_common_features_number(), 100, 20, get_labels_number()]
 
     params = mlp.create_classifier(dims)
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)

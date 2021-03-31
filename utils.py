@@ -25,7 +25,7 @@ def get_labels_number():
 
 def get_feature_index(feature):
     if len(F2I) != 0:
-        return F2I[feature]
+        return F2I.get(feature)
     return feature  # for XOR problem
 
 
@@ -47,6 +47,14 @@ def lang_to_index(dataset):
     return dataset
 
 
+def index_to_lang(index):
+    k = list(L2I.keys())
+    v = list(L2I.values())
+
+    l_idx = v.index(index)
+    return k[l_idx]
+
+
 def load_train_set(fname, features_type):
     data = read_data(fname)
 
@@ -60,8 +68,8 @@ def load_train_set(fname, features_type):
         fc.update(feats)
 
     # 600 most common bigrams in the training set.
-    # vocab = set([x for x, c in fc.most_common(600)])
-    vocab = set(fc.keys())
+    vocab = set([x for x, c in fc.most_common(700)])
+    # vocab = set(fc.keys())
 
     return TRAIN, vocab
 
@@ -94,7 +102,7 @@ def load_data(train_fname, dev_fname, features_type):
     # label strings to IDs
     L2I = {l: i for i, l in enumerate(list(sorted(set([l for l, t in train_dataset]))))}
 
-    train_vocab.update(dev_vocab)
+    # train_vocab.update(dev_vocab)
 
     # feature strings (bigrams) to IDs
     F2I = {f: i for i, f in enumerate(list(sorted(train_vocab)))}

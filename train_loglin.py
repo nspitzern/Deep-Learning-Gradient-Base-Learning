@@ -20,6 +20,8 @@ def feats_to_vec(features):
         # for each feature - add 1 to the vector
         index = get_feature_index(feature)
 
+        if index is None:  # skip unknown features
+            continue
         feat_vec[index] += 1
     return feat_vec
 
@@ -78,10 +80,10 @@ if __name__ == '__main__':
     # write code to load the train and dev sets, set up whatever you need,
     # and call train_classifier.
     
-    learning_rate = 1e-3
+    learning_rate = 5e-3
     num_iterations = 10
 
-    train_data, dev_data = load_data('train', 'dev', 'unigrams')
+    train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
     # input dimension is the number of features (bigrams)
     in_dim = get_common_features_number()

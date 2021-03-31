@@ -36,8 +36,8 @@ def classifier_output(x, params):
         result = np.dot(result, mat) + vec
 
         # apply tanh to all layers except the last one
-        if i < len(params) - 2:
-            activations_list.append(result.copy())
+        activations_list.append(result.copy())
+        if i > 2:
             result = np.tanh(result)
 
     # apply softmax to the last layer
@@ -71,59 +71,37 @@ def loss_and_gradients(x, y, params):
     y_hat = classifier_output(x, params)
     loss = -np.log(y_hat[y])
 
-    # make one hot vector out of y
-    # real_y = np.zeros(y_hat)
-    # real_y[y] = 1
+    real_y = np.zeros(y_hat.shape)
+    real_y[y] = 1
 
-    # gb_i = 1
-    # gW_i = x
-    #
-    # grads = list()
-    #
-    # j = 0
-    #
-    # for i in range(0, len(params), 2):
-    #     grads.extend([gW_i, gb_i])
-    #
-    #     g_tanh_i = 1 - np.tanh(activations_list[j]) ** 2
-    #     j += 1
-    #
-    #     gW_i = np.outer(g_tanh_i, gW_i)
-    #     gb_i = np.outer(g_tanh_i, gb_i)
-    #
-    # gW_i = np.outer(gW_i, y_hat)
-    # gW_i[:, y] -= gW_i
-    #
-    # gb_i = gb_i.copy()
-    # gb_i[y] -= 1
-    #
-    # grads.extend([gW_i.copy(), gb_i.copy()])
-
-    j = 1
+    e = y_hat - y
 
     grads = list()
 
-    gb = y_hat.copy()
-    gb[y] -= 1
+    i = iter(params)
+    params_pairs = list(zip(i, i))
 
-    gW = np.outer(activations_list[-j], y_hat.copy())
-    gW[:, y] -= activations_list[-j]
+    j = 1
 
-    for i in range(len(params) - 2, 0, -2):
+    z = activations_list[-j - 1]
+    for W, b in reversed(params_pairs):
+        h = np.tanh(z)
+
+        gb = e
+        gW = np.outer(h, gb)
+
         grads.extend([gb, gW])
-
-        g_tanh = 1 - np.tanh(activations_list[-j]) ** 2
-
-        z = activations_list[-j - 1]
-
-        gW = np.outer(z, g_tanh)
-
-        gb = g_tanh
 
         # increase j
         j += 1
 
-    grads.extend([gb, gW])
+        if j < len(activations_list):
+            g_tanh = 1 - np.tanh(z) ** 2
+
+            e = np.dot(W, e) * g_tanh
+
+            z = activations_list[-j - 1]
+
     return loss, grads
 
 

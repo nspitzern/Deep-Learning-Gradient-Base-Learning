@@ -21,6 +21,8 @@ def feats_to_vec(features):
         # for each feature - add 1 to the vector
         index = get_feature_index(feature)
 
+        if index is None:  # skip unknown features
+            continue
         feat_vec[index] += 1
     return feat_vec
 
@@ -85,9 +87,9 @@ if __name__ == '__main__':
     # params = mlp.create_classifier(2, 8, 2)
     # trained_params = train_classifier(data, data, 20, learning_rate, params)
 
-    learning_rate = 1e-3
+    learning_rate = 5e-3
     num_iterations = 10
-    hidden_layer_size = 64
+    hidden_layer_size = 18
 
     train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
