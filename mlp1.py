@@ -93,13 +93,29 @@ def create_classifier(in_dim, hid_dim, out_dim):
     a flat list of 4 elements, W, b, U, b_tag.
     """
     params = []
-    W = np.zeros((in_dim, hid_dim))
-    b = np.zeros(hid_dim)
-    U = np.zeros((hid_dim, out_dim))
-    b_tag = np.zeros(out_dim)
+    # W = np.zeros((in_dim, hid_dim))
+    # b = np.zeros(hid_dim)
+    # U = np.zeros((hid_dim, out_dim))
+    # b_tag = np.zeros(out_dim)
+
+    W = xavier_init(in_dim, hid_dim)
+    b = xavier_init(hid_dim)
+    U = xavier_init(hid_dim, out_dim)
+    b_tag = xavier_init(out_dim)
 
     params.extend([W, b, U, b_tag])
     return params
+
+
+def xavier_init(in_dim, out_dim=None):
+    if out_dim is not None:
+        eps = (np.sqrt(6) / np.sqrt(in_dim + out_dim))
+        param = np.random.uniform(-eps, eps, (in_dim, out_dim))
+    else:
+        eps = (np.sqrt(6) / np.sqrt(in_dim + 1))
+        param = np.random.uniform(-eps, eps, (in_dim, ))
+
+    return param
 
 
 if __name__ == '__main__':
@@ -116,12 +132,12 @@ if __name__ == '__main__':
 
     def _loss_and_b_grad(b):
         global W, U, b_tag
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        loss, grads = loss_and_gradients([1, 2, 3], 1, [W, b, U, b_tag])
         return loss, grads[1]
 
     def _loss_and_U_grad(U):
         global W, b, b_tag
-        loss, grads = loss_and_gradients([1, 2, 3], 0, [W, b, U, b_tag])
+        loss, grads = loss_and_gradients([1, 2, 3], 1, [W, b, U, b_tag])
         return loss, grads[2]
 
     def _loss_and_b_tag_grad(b_tag):

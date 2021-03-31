@@ -3,6 +3,7 @@ import numpy as np
 import mlp1 as mlp
 import random
 from utils import *
+from xor_data import data
 
 STUDENT = {'name': 'Nadav Spitzer',
            'ID': '302228275'}
@@ -80,9 +81,9 @@ if __name__ == '__main__':
     # write code to load the train and dev sets, set up whatever you need,
     # and call train_classifier.
 
-    learning_rate = 1e-2
+    learning_rate = 1e-3
     num_iterations = 10
-    hidden_layer_size = 128
+    hidden_layer_size = 64
 
     train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
