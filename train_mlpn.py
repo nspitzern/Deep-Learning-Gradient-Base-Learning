@@ -62,6 +62,7 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             # YOUR CODE HERE
             # update the parameters according to the gradients
             # and the learning rate.
+            grads = list(reversed(grads))
 
             for i in range(len(params)):
                 params[i] -= learning_rate * grads[i]

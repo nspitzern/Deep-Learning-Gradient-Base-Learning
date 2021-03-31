@@ -93,10 +93,6 @@ def create_classifier(in_dim, hid_dim, out_dim):
     a flat list of 4 elements, W, b, U, b_tag.
     """
     params = []
-    # W = np.zeros((in_dim, hid_dim))
-    # b = np.zeros(hid_dim)
-    # U = np.zeros((hid_dim, out_dim))
-    # b_tag = np.zeros(out_dim)
 
     W = xavier_init(in_dim, hid_dim)
     b = xavier_init(hid_dim)
