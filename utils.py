@@ -1,5 +1,8 @@
 from collections import Counter
 
+F2I = dict()
+L2I = dict()
+
 
 def read_data(fname):
     data = []
@@ -11,7 +14,9 @@ def read_data(fname):
 
 
 def get_common_features_number():
-    return len(F2I.keys())
+    if len(F2I) != 0:
+        return len(F2I.keys())
+    return 2  # for the xor problem
 
 
 def get_labels_number():
@@ -19,7 +24,9 @@ def get_labels_number():
 
 
 def get_feature_index(feature):
-    return F2I[feature]
+    if len(F2I) != 0:
+        return F2I[feature]
+    return feature  # for XOR problem
 
 
 def text_to_bigrams(text):

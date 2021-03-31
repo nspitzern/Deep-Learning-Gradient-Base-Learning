@@ -81,6 +81,10 @@ if __name__ == '__main__':
     # write code to load the train and dev sets, set up whatever you need,
     # and call train_classifier.
 
+    # learning_rate = 5e-1
+    # params = mlp.create_classifier(2, 8, 2)
+    # trained_params = train_classifier(data, data, 20, learning_rate, params)
+
     learning_rate = 1e-3
     num_iterations = 10
     hidden_layer_size = 64

@@ -1,0 +1,5 @@
+1. I got about the same accuracy for the log-linear and the MLP (~85%).
+
+2. When using unigrams I got also about hte same accuracies: ~66%-68% with the MLP1 and the log-linear models.
+
+3. The results may differ because of the initialization process but on average in about 10 iterations the model solves the XOR problem.

@@ -81,7 +81,7 @@ if __name__ == '__main__':
     learning_rate = 1e-3
     num_iterations = 10
 
-    train_data, dev_data = load_data('train', 'dev', 'bigrams')
+    train_data, dev_data = load_data('train', 'dev', 'unigrams')
 
     # input dimension is the number of features (bigrams)
     in_dim = get_common_features_number()
