@@ -64,7 +64,6 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
             # YOUR CODE HERE
             # update the parameters according to the gradients
             # and the learning rate.
-            grads = list(reversed(grads))
 
             for i in range(len(params)):
                 params[i] -= learning_rate * grads[i]
@@ -87,7 +86,7 @@ if __name__ == '__main__':
     train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
     # define the sizes of the layers in the network
-    dims = [get_common_features_number(), 100, 20, get_labels_number()]
+    dims = [get_common_features_number(), 128, 64, get_labels_number()]
 
     params = mlp.create_classifier(dims)
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)

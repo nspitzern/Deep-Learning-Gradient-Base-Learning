@@ -22,23 +22,26 @@ def softmax(x):
 
 def classifier_output(x, params):
     # YOUR CODE HERE.
-    # params = list(reversed(params))
 
     global activations_list
     activations_list = [x]
 
     result = x
 
-    for i in range(0, len(params) - 1, 2):
+    mat = params[0]
+    vec = params[1]
+
+    result = np.dot(result, mat) + vec
+
+    for i in range(2, len(params), 2):
+        activations_list.append(result.copy())
+
+        result = np.tanh(result)
+
         mat = params[i]
         vec = params[i + 1]
 
         result = np.dot(result, mat) + vec
-
-        # apply tanh to all layers except the last one
-        activations_list.append(result.copy())
-        if i > 2:
-            result = np.tanh(result)
 
     # apply softmax to the last layer
     probs = softmax(result)
@@ -74,33 +77,34 @@ def loss_and_gradients(x, y, params):
     real_y = np.zeros(y_hat.shape)
     real_y[y] = 1
 
-    e = y_hat - y
+    e = y_hat - real_y
 
     grads = list()
+
+    j = 1
+
+    z = activations_list[-j]
 
     i = iter(params)
     params_pairs = list(zip(i, i))
 
-    j = 1
-
-    z = activations_list[-j - 1]
     for W, b in reversed(params_pairs):
         h = np.tanh(z)
 
         gb = e
         gW = np.outer(h, gb)
 
-        grads.extend([gb, gW])
+        grads = [gW, gb] + grads
 
         # increase j
         j += 1
 
-        if j < len(activations_list):
+        if j <= len(activations_list):
             g_tanh = 1 - np.tanh(z) ** 2
 
             e = np.dot(W, e) * g_tanh
 
-            z = activations_list[-j - 1]
+            z = activations_list[-j]
 
     return loss, grads
 
@@ -117,7 +121,7 @@ def create_classifier(dims):
     We will have input of 300 dimension, a hidden layer of 20 dimension, passed
     to a layer of 30 dimensions, passed to learn of 40 dimensions, and finally
     an output of 5 dimensions.
-    
+
     Assume a tanh activation function between all the layers.
 
     return:
