@@ -6,7 +6,10 @@ from utils import *
 from test_predict import predict_on_test
 
 STUDENT = {'name': 'Nadav Spitzer',
-           'ID': '302228275'}
+           'ID': '302228275',
+           'name2': 'Lior Frenkel',
+           'ID2': '204728315'
+           }
 
 
 def feats_to_vec(features):
