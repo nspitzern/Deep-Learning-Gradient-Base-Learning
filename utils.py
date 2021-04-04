@@ -1,5 +1,11 @@
 from collections import Counter
 
+STUDENT = {'name': 'Nadav Spitzer',
+           'ID': '302228275',
+           'name2': 'Lior Frenkel',
+           'ID2': '204728315'
+           }
+
 F2I = dict()
 L2I = dict()
 

@@ -4,7 +4,10 @@ import mlpn as mlp
 from utils import load_test_set, index_to_lang, get_common_features_number, get_feature_index
 
 STUDENT = {'name': 'Nadav Spitzer',
-           'ID': '302228275'}
+           'ID': '302228275',
+           'name2': 'Lior Frenkel',
+           'ID2': '204728315'
+           }
 
 
 def feats_to_vec(features):
@@ -32,4 +35,4 @@ def predict_on_test(params):
         for _, features in test_set:
             x = feats_to_vec(features)
             pred = mlp.predict(x, params)
-            f.writelines(index_to_lang(pred))
+            print(index_to_lang(pred), file=f)
