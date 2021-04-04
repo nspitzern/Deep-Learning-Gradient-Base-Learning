@@ -3,6 +3,7 @@ import numpy as np
 import mlpn as mlp
 import random
 from utils import *
+from test_predict import predict_on_test
 
 STUDENT = {'name': 'Nadav Spitzer',
            'ID': '302228275'}
@@ -81,13 +82,14 @@ if __name__ == '__main__':
     # and call train_classifier.
 
     learning_rate = 1e-3
-    num_iterations = 10
+    num_iterations = 3
 
     train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
     # define the sizes of the layers in the network
-    dims = [get_common_features_number(), 128, 64, get_labels_number()]
+    dims = [get_common_features_number(), 2048, 1024, 1024, 2048, get_labels_number()]
 
     params = mlp.create_classifier(dims)
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
+    predict_on_test(trained_params)
 

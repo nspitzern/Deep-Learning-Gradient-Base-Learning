@@ -67,7 +67,7 @@ def load_train_set(fname, features_type):
     for l, feats in TRAIN:
         fc.update(feats)
 
-    # 600 most common bigrams in the training set.
+    # 700 most common bigrams in the training set.
     vocab = set([x for x, c in fc.most_common(700)])
     # vocab = set(fc.keys())
 
@@ -94,6 +94,19 @@ def load_dev_set(fname, features_type):
     return DEV, vocab
 
 
+def load_test_set(fname, features_type):
+    data = read_data(fname)
+
+    if features_type == 'bigrams':
+        TEST = [(l,text_to_bigrams(t)) for l,t in data]
+    else:
+        TEST = [(l, text_to_unigrams(t)) for l, t in data]
+
+    return TEST
+
+
+
+
 def load_data(train_fname, dev_fname, features_type):
     train_dataset, train_vocab = load_train_set(train_fname, features_type)
     dev_dataset, dev_vocab = load_dev_set(dev_fname, features_type)
@@ -102,7 +115,7 @@ def load_data(train_fname, dev_fname, features_type):
     # label strings to IDs
     L2I = {l: i for i, l in enumerate(list(sorted(set([l for l, t in train_dataset]))))}
 
-    # train_vocab.update(dev_vocab)
+    train_vocab.update(dev_vocab)
 
     # feature strings (bigrams) to IDs
     F2I = {f: i for i, f in enumerate(list(sorted(train_vocab)))}
