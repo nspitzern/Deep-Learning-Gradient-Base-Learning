@@ -76,6 +76,10 @@ def train_classifier(train_data, dev_data, num_iterations, learning_rate, params
         train_accuracy = accuracy_on_dataset(train_data, params)
         dev_accuracy = accuracy_on_dataset(dev_data, params)
         print(I, train_loss, train_accuracy, dev_accuracy)
+
+        if dev_accuracy >= 0.87:
+            predict_on_test(params)
+            return params
     return params
 
 
@@ -84,13 +88,13 @@ if __name__ == '__main__':
     # write code to load the train and dev sets, set up whatever you need,
     # and call train_classifier.
 
-    learning_rate = 1e-3
-    num_iterations = 3
+    learning_rate = 7e-4
+    num_iterations = 10
 
     train_data, dev_data = load_data('train', 'dev', 'bigrams')
 
     # define the sizes of the layers in the network
-    dims = [get_common_features_number(), 2048, 1024, 1024, 2048, get_labels_number()]
+    dims = [get_common_features_number(), 64, 64, 64, get_labels_number()]
 
     params = mlp.create_classifier(dims)
     trained_params = train_classifier(train_data, dev_data, num_iterations, learning_rate, params)
